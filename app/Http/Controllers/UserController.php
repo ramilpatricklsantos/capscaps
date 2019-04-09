@@ -32,8 +32,8 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+     public function index()
+     {
         //
         // dd(Auth::user());    
         $users = User::all();
@@ -81,13 +81,16 @@ class UserController extends Controller
      * @param  \App\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     //public function edit($id)
     {
         //
-        $user = \App\user::find($id);
+       // $user = \App\user::find($id);
         //return view('users.edit_user',compact('user','id'));
-        return view('users.edit_user', compact('user', 'id'));
+
+        /* -- RETURN EDIT_USER.BLADE.PHP --*/
+        return view('users.edit_user', compact('user'));
+
     }
 
     /**
@@ -108,11 +111,23 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['nullable', 'string', 'min:6', 'confirmed'],
             'type' => ['required', 'string', 'max:6'],
+
         ]);
 
+        
+        /*$request->user()->fill([
+            'password' => Hash::make($request->password),
+        ]);*/
 
+        
 
-        $user->firstname = $request->firstname;
+        $user->update($request->all());
+
+        
+
+        return back();
+
+        /*$user->firstname = $request->firstname;
         $user->middlename = $request->middlename;
         $user->lastname = $request->lastname;
         $user->email = $request->email;
@@ -122,9 +137,9 @@ class UserController extends Controller
         }
         $user->type = $request->type;
 
-        $user->save();
+        $user->save();*/
 
-        return redirect('/users');
+        /*return redirect('/users');*/
 
     }
 
@@ -140,11 +155,16 @@ class UserController extends Controller
         if($user->type == 'admin'){
             return abort(401);
 
+        }elseif ($user->type == 'disabled'  ) {
+            $user -> type = 'users';
+
         }else{
-            $user -> type == '0';
+            $user -> type = 'disabled';
+
         } 
-            $user->save();
-            return redirect('/users');
+
+        $user->save();
+        return redirect('/users');
 
         /*
             DISABLE, DON'T DELETE
@@ -162,10 +182,10 @@ class UserController extends Controller
             - redirect to '/users'
                 return ?('?');
         */
-    }
+            }
 
-    public function books_borrowed()
-    {
+            public function books_borrowed()
+            {
         /*
             - get the id property of the authenticated user and save it as a variable named $id
                 - $id = Auth::?()->?;
@@ -187,16 +207,16 @@ class UserController extends Controller
             - return the 'users.books_borrowed' view, using the compact() method to pass the variables $book_requests and $books
                 - return ?('?', compact('?', '?'));
         */
-    }
+            }
 
-    public function approve($id)
-    {
+            public function approve($id)
+            {
 
-        $user = user::find($id); 
-        $user -> status = '1';
-        $user -> save();
-        return redirect('/users');
-       
-    }
+                $user = user::find($id); 
+                $user -> status = '1';
+                $user -> save();
+                return redirect('/users');
 
-}
+            }
+
+        }

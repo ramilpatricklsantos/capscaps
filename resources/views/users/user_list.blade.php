@@ -28,21 +28,33 @@ User List
       <td>{{ $user->type }}</td>
       <td>{{ $user->status }}</td>
       <td>
+        
         @if($user->status == 0)
         <form action="/users/{{ $user->id }}/approve" method="POST">
           @csrf
-        <button class="btn btn-primary"><i class="fas fa-check"></i> Approval</button>
+          <button class="btn btn-primary"><i class="fas fa-check"></i> Approval</button>
         </form>
+
         @else
-        <form action="/users/{{ $user->id }}/edit" method="POST" style="display: inline-block;">
+            @if($user->type == 'disabled')
+        <form action="/users/{{ $user->id }}/destroy" method="GET" style="display: inline-block";>
           @csrf
-        <button class="btn btn-secondary"><i class="fas fa-edit"></i> Editing</button>
+          <button class="btn btn-success" onclick="return confirm('Are you sure to enable this user?');"><i class="fas fa-check-circle"></i> Enable</button>
         </form>
-        <form action="/users/{{ $user->id }}/delete" method="POST">
+
+            @else
+        <form action="/users/{{ $user->id }}/edit" method="GET" style="display: inline-block;">
           @csrf
-        <button class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
+          <button class="btn btn-secondary"><i class="fas fa-edit"></i> Editing</button>
         </form>
+        <form action="/users/{{ $user->id }}/destroy" method="GET" style="display: inline-block";>
+          @csrf
+          <button class="btn btn-danger" onclick="return confirm('Are you sure to disable this user?');"><i class="fas fa-times-circle"></i> Disable</button>
+        </form>
+           @endif
         @endif
+
+
       </td>
     </tr>   
     @endforeach

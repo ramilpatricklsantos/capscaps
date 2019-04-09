@@ -14,15 +14,16 @@ User Details Update
         <div class="card-body">
           
          
-          <form method="POST" action="/users/{{ $user->id }}/update">
+          <form method="POST" action="/users/{{ $user->id }}">
             @csrf
-           
+           {!! method_field('PUT') !!}
+
             <!-- FIRSTNAME -->
             <div class="form-group row">
               <label for="firstname" class="col-md-4 col-form-label text-md-right">{{ __('First Name:') }}</label>
 
               <div class="col-md-6">
-                <input id="firstname" type="text" class="form-control{{ $errors->has('firstname') ? ' is-invalid' : '' }}" name="firstname" value="{{ $user->firstname }}"  required autofocus>
+                <input id="firstname" type="text" class="form-control{{ $errors->has('firstname') ? ' is-invalid' : '' }}" name="firstname" value="{{ @$user->firstname }}"  required autofocus>
 
                 @if ($errors->has('firstname'))
                 <span class="invalid-feedback" role="alert">
@@ -82,7 +83,7 @@ User Details Update
               <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password:') }}</label>
 
               <div class="col-md-6">
-                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" value="{{ $user->email }}"  required>
+                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" value="{{ $user->password }}"  required>
 
                 @if ($errors->has('password'))
                 <span class="invalid-feedback" role="alert">
@@ -97,7 +98,7 @@ User Details Update
               <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password:') }}</label>
 
               <div class="col-md-6">
-                <input id="password-confirm" type="password" class="form-control" name="password_confirmation"  required>
+                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" value="{{ $user->password }}" required>
                 
               </div>
             </div>
@@ -110,7 +111,7 @@ User Details Update
                 <select name="type" class=" form-control">
                   <option >Select .. </option>
                   <option value="admin">admin</option>
-                  <option value="guest">guest</option>
+                  <option value="guest">users</option>
                 </select>
 
                 @if ($errors->has('type'))
@@ -122,6 +123,7 @@ User Details Update
             </div>
             <hr>
             <button class="btn btn-primary form-control" type="submit"> Update</button>
+            {!! method_field('PUT') !!}
 </form>
 
 </div>
